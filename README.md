@@ -16,27 +16,43 @@ Here, we can see that the refactored code ran in 1/10th of the time the time the
 
 Differences in Code:
 The main difference between the original and the refactored code is as follows. The original code loops through all the tickers, and then loops through all the rows of data, and correlates the data in the spreadsheet to the appropriate ticker. For example, 
+
    For i = 0 to 11
      ticker=tickers(i)
+     
 Tells excel to make 12 calculations, one for each stock, and 
+
    totalVolume = totalVolume + Cells(j, 8).Value
+   
 then adds the volume for each trading day to calculate a total volume relating to each stock. As the trading volume is stored in the 8th column (hence j,8)
 
 However in the refactored code, we used the same initial loop of 
+
 For i = 0 To 11
     ticker = tickers(i)
+    
 And then created an output array for the ticker volumes as well. 
+
      tickerVolumes(i) = 0
+     
 In order to make this code work, we needed a variable to relate back to our ticker index. So we created a tickerIndex variable and set it to zero.
+
      tickerIndex = 0
+     
 And then when we calculated stock volume in our output array, we used the tickerIndex variable to move through the stock tickers in the index:
+
      tickerVolumes(tickerIndex) = tickerVolumes(tickerIndex) + Cells(j, 8).Value
+     
 Since tickerIndex is a static variable, we had to create a script to increase the index to move from one ticker to the next. We did this with:
+
      tickerIndex = tickerIndex + 1
 
+
 For the stock starting and ending prices we had to use the script:
+
      If Cells(j + 1, 1).Value <> tickers(tickerIndex) And Cells(j, 1).Value = tickers(tickerIndex) Then
      tickerEndingPrices(tickerIndex) = Cells(j, 6).Value
+     
 This tells excel that if the value of the data in the ticker column is the equal to the ticker we are looking for, AND the ticker after it (j+1) is different, then this is the last trading day for that specific ticker. So the ending price for the year would be the value of the ticker's closing price, stored in the 6th column of the spreadsheet ((j,6).value). 
 
 Summary / Advantages and Disadvantages:
